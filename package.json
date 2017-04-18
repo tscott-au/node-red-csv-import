@@ -1,0 +1,23 @@
+{
+  "name": "node-red-csv-import",
+  "version": "1.0.0",
+  "description": "examples of importing csv data to node-red",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tscott-au/node-red-csv-import.git"
+  },
+  "keywords": [
+    "node-red",
+    "csv"
+  ],
+  "author": "Tim Scott",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/tscott-au/node-red-csv-import/issues"
+  },
+  "homepage": "https://github.com/tscott-au/node-red-csv-import#readme"
+}
