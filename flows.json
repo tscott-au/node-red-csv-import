@@ -1,0 +1,2289 @@
+[
+    {
+        "id": "f46074a2.0f5938",
+        "type": "tab",
+        "label": "Read Policy"
+    },
+    {
+        "id": "567060e4.676f1",
+        "type": "tab",
+        "label": "Flow 1"
+    },
+    {
+        "id": "651a0b9e.1fc304",
+        "type": "tab",
+        "label": "Flow 2"
+    },
+    {
+        "id": "c77ac6e9.03d1d8",
+        "type": "tab",
+        "label": "Flow 3"
+    },
+    {
+        "id": "139514ac.2ca9ab",
+        "type": "tab",
+        "label": "cloudant - couchd tests"
+    },
+    {
+        "id": "dba0aecc.e9079",
+        "type": "tab",
+        "label": "msg with a function"
+    },
+    {
+        "id": "b1e12f56.bb884",
+        "type": "tab",
+        "label": "Flow 4"
+    },
+    {
+        "id": "2119bf4b.5d876",
+        "type": "tab",
+        "label": "Import CSV files to Q"
+    },
+    {
+        "id": "2974bec.913ba42",
+        "type": "subflow",
+        "name": "Import Risks",
+        "info": "",
+        "in": [
+            {
+                "x": 50,
+                "y": 30,
+                "wires": [
+                    {
+                        "id": "2dfdfd62.d05362"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 458,
+                "y": 630,
+                "wires": []
+            }
+        ]
+    },
+    {
+        "id": "8186dfb9.8358a",
+        "type": "subflow",
+        "name": "Store Risk",
+        "info": "is this a description?\n",
+        "in": [
+            {
+                "x": 50,
+                "y": 30,
+                "wires": [
+                    {
+                        "id": "f4f77159.0f50e"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 766,
+                "y": 684,
+                "wires": [
+                    {
+                        "id": "d846d8db.2da5b8",
+                        "port": 1
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "e71b891b.d54348",
+        "type": "subflow",
+        "name": "Test",
+        "info": "",
+        "in": [
+            {
+                "x": 50,
+                "y": 30,
+                "wires": [
+                    {
+                        "id": "bf9c95a1.7aa1c8"
+                    }
+                ]
+            }
+        ],
+        "out": []
+    },
+    {
+        "id": "1e057e9b.670cc1",
+        "type": "subflow",
+        "name": "use msg function",
+        "info": "",
+        "in": [
+            {
+                "x": 50,
+                "y": 30,
+                "wires": [
+                    {
+                        "id": "b9af3dad.83359"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 402,
+                "y": 177,
+                "wires": [
+                    {
+                        "id": "b9af3dad.83359",
+                        "port": 0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "bd123b44.3dee98",
+        "type": "cloudant",
+        "z": "",
+        "host": "http://localhost:5984",
+        "name": "test db"
+    },
+    {
+        "id": "c58994c4.ef9f58",
+        "type": "amqp-server",
+        "z": "",
+        "host": "192.168.99.100",
+        "port": "5672",
+        "vhost": "/",
+        "keepalive": "30",
+        "usetls": false,
+        "verifyservercert": true,
+        "usetopology": true,
+        "topology": "{\n\t\"exchanges\": [\n\t\t{\"name\": \"exchange1\", \"type\": \"direct\", \"options\": {\"durable\": false}},\n\t\t{\"name\": \"exchange2\"}\n\t],\n\t\"queues\": [\n\t\t{\"name\": \"queue1\", \"options\": {\"messageTtl\": 60000}},\n\t\t{\"name\": \"queue2\"}\n\t],\n\t\"bindings\": [\n\t\t{\"source\": \"exchange1\", \"queue\": \"queue1\", \"pattern\": \"debug\", \"args\": {}},\n\t\t{\"source\": \"exchange1\", \"exchange\": \"exchange2\", \"pattern\": \"error\"},\n\t\t{\"source\": \"exchange2\", \"queue\": \"queue2\"}\n\t]\n}"
+    },
+    {
+        "id": "91b4702d.8d878",
+        "type": "inject",
+        "z": "f46074a2.0f5938",
+        "name": "start the process",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 170,
+        "y": 117,
+        "wires": [
+            [
+                "96f6a8ba.76cef8"
+            ]
+        ]
+    },
+    {
+        "id": "2157feae.55a342",
+        "type": "bigcsv",
+        "z": "f46074a2.0f5938",
+        "name": "",
+        "filename": "",
+        "x": 448,
+        "y": 257,
+        "wires": [
+            [
+                "c493d14.196cb3"
+            ],
+            [
+                "ad59def6.207fb",
+                "5f71baf.4a8cf44"
+            ]
+        ]
+    },
+    {
+        "id": "9cbfe2ad.b8f01",
+        "type": "function",
+        "z": "f46074a2.0f5938",
+        "name": "Configure Policy file import",
+        "func": "msg.filename = flow.get(msg.topic).sourceDataPath + \"POLICY.CSV\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 213,
+        "y": 455,
+        "wires": [
+            [
+                "2157feae.55a342"
+            ]
+        ]
+    },
+    {
+        "id": "ad59def6.207fb",
+        "type": "debug",
+        "z": "f46074a2.0f5938",
+        "name": "status",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 980,
+        "y": 617,
+        "wires": []
+    },
+    {
+        "id": "96f6a8ba.76cef8",
+        "type": "function",
+        "z": "f46074a2.0f5938",
+        "name": "Load configurations",
+        "func": "\nfunction getRandom(min, max) {\n  min = Math.ceil(min);\n  max = Math.floor(max);\n  return Math.floor(Math.random() * (max - min + 1)) + min;\n}\nvar i = Date.now();\nvar jobConfig = {};\njobConfig.batchId = String(i) + \":\" + String(getRandom(100,999));\njobConfig.model = 'policy';\njobConfig.sourceDataPath = './sample/Current/subset/';\nflow.set(jobConfig.batchId, jobConfig);\nmsg.topic =  jobConfig.batchId;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 172,
+        "y": 261,
+        "wires": [
+            [
+                "69b0c042.7370b"
+            ]
+        ]
+    },
+    {
+        "id": "5f71baf.4a8cf44",
+        "type": "switch",
+        "z": "f46074a2.0f5938",
+        "name": "on end load detail",
+        "property": "control.message",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "success",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "outputs": 1,
+        "x": 539,
+        "y": 515,
+        "wires": [
+            [
+                "c31ff069.0b9ad"
+            ]
+        ]
+    },
+    {
+        "id": "584553a6.e6395c",
+        "type": "debug",
+        "z": "f46074a2.0f5938",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 1100,
+        "y": 766,
+        "wires": []
+    },
+    {
+        "id": "60107062.1e793",
+        "type": "function",
+        "z": "2974bec.913ba42",
+        "name": "Configure Policy file import",
+        "func": "msg.filename = flow.get('jobConfig').sourceDataPath + \"BPT031.CSV\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 201,
+        "y": 315,
+        "wires": [
+            [
+                "cf48654d.311eb8"
+            ]
+        ]
+    },
+    {
+        "id": "cf48654d.311eb8",
+        "type": "bigcsv",
+        "z": "2974bec.913ba42",
+        "name": "",
+        "filename": "",
+        "x": 443,
+        "y": 362,
+        "wires": [
+            [
+                "45a46253.1f9b8c"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "54d5c4cd.02b1bc",
+        "type": "debug",
+        "z": "f46074a2.0f5938",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "true",
+        "x": 1038,
+        "y": 184,
+        "wires": []
+    },
+    {
+        "id": "1b10ea3d.b01826",
+        "type": "function",
+        "z": "567060e4.676f1",
+        "name": "Wait for all tasks to finish",
+        "func": "context.data = context.data || new Object();\n\nswitch (msg.topic) {\n    case \"task1\":\n        context.data.task1 = msg.payload;\n        msg = null;\n        break;\n    case \"task2\":\n        context.data.task2 = msg.payload;\n        msg = null;\n        break;\n    case \"task3\":\n        context.data.task3 = msg.payload;\n        msg = null;\n        break;\n        \n    default:\n        msg = null;\n    \tbreak;\n\n}\n\nif(context.data.task1 != null && context.data.task2 != null && context.data.task3 != null) {\n\tmsg2 = new Object();\n    msg2 = context.data;\n    context.data=null;\n    msg2._id = \"testmsg79\";\n\treturn msg2;\n} else return msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 773,
+        "y": 280,
+        "wires": [
+            [
+                "54e1b67d.49d0b8",
+                "92b7c69.c7a8e38",
+                "4fddd2b2.78778c"
+            ]
+        ]
+    },
+    {
+        "id": "2c2e4875.373ba8",
+        "type": "delay",
+        "z": "567060e4.676f1",
+        "name": "Random delay",
+        "pauseType": "random",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 515,
+        "y": 189,
+        "wires": [
+            [
+                "1b10ea3d.b01826"
+            ]
+        ]
+    },
+    {
+        "id": "54e1b67d.49d0b8",
+        "type": "debug",
+        "z": "567060e4.676f1",
+        "name": "debug output",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 1205,
+        "y": 378,
+        "wires": []
+    },
+    {
+        "id": "7c337aa2.5c1574",
+        "type": "delay",
+        "z": "567060e4.676f1",
+        "name": "Random delay",
+        "pauseType": "random",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 519,
+        "y": 285,
+        "wires": [
+            [
+                "1b10ea3d.b01826"
+            ]
+        ]
+    },
+    {
+        "id": "f2efa9a6.1def28",
+        "type": "delay",
+        "z": "567060e4.676f1",
+        "name": "Random delay",
+        "pauseType": "random",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 516,
+        "y": 369,
+        "wires": [
+            [
+                "1b10ea3d.b01826"
+            ]
+        ]
+    },
+    {
+        "id": "f23adadc.50cdf8",
+        "type": "function",
+        "z": "567060e4.676f1",
+        "name": "Task1",
+        "func": "msg.topic=\"task1\";\nmsg.payload=\"Task1's payload\"\nreturn msg;",
+        "outputs": 1,
+        "x": 347,
+        "y": 189,
+        "wires": [
+            [
+                "2c2e4875.373ba8"
+            ]
+        ]
+    },
+    {
+        "id": "b80a9f51.357cd",
+        "type": "function",
+        "z": "567060e4.676f1",
+        "name": "Task2",
+        "func": "msg.topic=\"task2\";\nmsg.payload=\"Task2's payload\"\nreturn msg;",
+        "outputs": 1,
+        "x": 350,
+        "y": 284,
+        "wires": [
+            [
+                "7c337aa2.5c1574"
+            ]
+        ]
+    },
+    {
+        "id": "371d75d7.16f22a",
+        "type": "function",
+        "z": "567060e4.676f1",
+        "name": "Task3",
+        "func": "msg.topic=\"task3\";\nmsg.payload=\"Task3's payload\"\nreturn msg;",
+        "outputs": 1,
+        "x": 345,
+        "y": 368,
+        "wires": [
+            [
+                "f2efa9a6.1def28"
+            ]
+        ]
+    },
+    {
+        "id": "6e5e50df.1a018",
+        "type": "inject",
+        "z": "567060e4.676f1",
+        "name": "Start",
+        "topic": "",
+        "payload": "",
+        "payloadType": "none",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 181,
+        "y": 273,
+        "wires": [
+            [
+                "f23adadc.50cdf8",
+                "b80a9f51.357cd",
+                "371d75d7.16f22a"
+            ]
+        ]
+    },
+    {
+        "id": "c493d14.196cb3",
+        "type": "function",
+        "z": "f46074a2.0f5938",
+        "name": "set key",
+        "func": "var p = msg.payload;\ndelete msg.payload;\nmsg.payload = {};\nmsg.payload.policy = p;\nmsg.payload.batchId = flow.get(msg.topic).batchId;\n\nmsg.payload._id = flow.get(msg.topic).model +\n    \":\" + flow.get(msg.topic).batchId + \n    \":\" + msg.payload.policy.COMPANY +\n    \":\" + msg.payload.policy.PRODUCT +\n    \":\" + msg.payload.policy.POLICY \n    ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 788,
+        "y": 86,
+        "wires": [
+            [
+                "54d5c4cd.02b1bc",
+                "ec3c2e48.bd12a",
+                "e661c4c6.718c68"
+            ]
+        ]
+    },
+    {
+        "id": "a410974a.d4f6f8",
+        "type": "subflow:2974bec.913ba42",
+        "z": "f46074a2.0f5938",
+        "name": "",
+        "x": 722,
+        "y": 738,
+        "wires": [
+            [
+                "77471e75.c69cd"
+            ]
+        ]
+    },
+    {
+        "id": "2dfdfd62.d05362",
+        "type": "change",
+        "z": "2974bec.913ba42",
+        "name": "Get configurations",
+        "rules": [
+            {
+                "t": "set",
+                "p": "jobConfig",
+                "pt": "flow",
+                "to": "jobConfig",
+                "tot": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "jobConfig",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 182,
+        "y": 167,
+        "wires": [
+            [
+                "60107062.1e793"
+            ]
+        ]
+    },
+    {
+        "id": "329a1e62.1eb9a2",
+        "type": "inject",
+        "z": "651a0b9e.1fc304",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 236,
+        "y": 156,
+        "wires": [
+            [
+                "b7907096.b681"
+            ]
+        ]
+    },
+    {
+        "id": "217f0ab5.3b8d86",
+        "type": "change",
+        "z": "651a0b9e.1fc304",
+        "name": "Pass configurations",
+        "rules": [
+            {
+                "t": "set",
+                "p": "batchId",
+                "pt": "msg",
+                "to": "batchId",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "sourceDataPath",
+                "pt": "msg",
+                "to": "sourceDataPath",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "model",
+                "pt": "msg",
+                "to": "model",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 326,
+        "y": 334,
+        "wires": [
+            [
+                "cfff017c.9b558"
+            ]
+        ]
+    },
+    {
+        "id": "b7907096.b681",
+        "type": "function",
+        "z": "651a0b9e.1fc304",
+        "name": "Load configurations",
+        "func": "flow.set('batchId', Date.now());\nflow.set('model', 'policy');\nflow.set('sourceDataPath', \"./sample/Current/subset/\");\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 247,
+        "y": 241,
+        "wires": [
+            [
+                "217f0ab5.3b8d86"
+            ]
+        ]
+    },
+    {
+        "id": "cfff017c.9b558",
+        "type": "subflow:2974bec.913ba42",
+        "z": "651a0b9e.1fc304",
+        "x": 629,
+        "y": 382,
+        "wires": [
+            [
+                "ddc27e7e.024d9"
+            ]
+        ]
+    },
+    {
+        "id": "ddc27e7e.024d9",
+        "type": "debug",
+        "z": "651a0b9e.1fc304",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 1043,
+        "y": 363,
+        "wires": []
+    },
+    {
+        "id": "4059f3ea.3ccc7c",
+        "type": "debug",
+        "z": "2974bec.913ba42",
+        "name": "Catch store Risk",
+        "active": true,
+        "console": "true",
+        "complete": "true",
+        "x": 1170,
+        "y": 377,
+        "wires": []
+    },
+    {
+        "id": "5faad6a5.7fa1b8",
+        "type": "function",
+        "z": "8186dfb9.8358a",
+        "name": "set key for lookupmsg",
+        "func": "msg.topic = \"\";\n\nmsg.payload = msg.payload.key;\n    \nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 506,
+        "y": 72,
+        "wires": [
+            [
+                "b5983cca.b259b"
+            ]
+        ]
+    },
+    {
+        "id": "f4f77159.0f50e",
+        "type": "change",
+        "z": "8186dfb9.8358a",
+        "name": "Get configurations",
+        "rules": [
+            {
+                "t": "set",
+                "p": "retryCount",
+                "pt": "msg",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "inputPayload",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 194,
+        "y": 74,
+        "wires": [
+            [
+                "5faad6a5.7fa1b8"
+            ]
+        ]
+    },
+    {
+        "id": "a9b78673.f3af88",
+        "type": "delay",
+        "z": "8186dfb9.8358a",
+        "name": "Random delay",
+        "pauseType": "random",
+        "timeout": "2",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "2",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 237,
+        "y": 544,
+        "wires": [
+            [
+                "ee95dc0e.bded"
+            ]
+        ]
+    },
+    {
+        "id": "8d26659e.3ce8d8",
+        "type": "catch",
+        "z": "8186dfb9.8358a",
+        "name": "Catch import risk errors",
+        "scope": null,
+        "x": 165,
+        "y": 252,
+        "wires": [
+            [
+                "d03f93e4.1f204"
+            ]
+        ]
+    },
+    {
+        "id": "ee95dc0e.bded",
+        "type": "function",
+        "z": "8186dfb9.8358a",
+        "name": "Increment retry count",
+        "func": "if (msg.retryCount !== undefined && msg.retryCount !== null) {\n    msg.retryCount = msg.retryCount + 1;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 265,
+        "y": 631,
+        "wires": [
+            [
+                "d846d8db.2da5b8"
+            ]
+        ]
+    },
+    {
+        "id": "7228211b.785d9",
+        "type": "function",
+        "z": "8186dfb9.8358a",
+        "name": "Add risk to doc",
+        "func": "if (msg.payload === undefined || msg.payload === null) \n{   \n    node.error(\"Missing payload\", msg);\n    \n}\n\nif (msg.payload.policy === undefined || msg.payload.policy === null) \n{   node.error(\"Missing payload.policy\", msg);\n    \n}\n\nif (msg.payload.policy.risks === undefined ) {\n    msg.payload.policy.risks = [];\n}\n\nif (msg.inputPayload.aggregated === undefined ||\n    msg.inputPayload.aggregated === null)  {\n    msg.payload.policy.risks.push(msg.inputPayload);\n} else {\n    msg.inputPayload.aggregated.forEach(function(element) {\n    msg.payload.policy.risks.push(element);\n    });\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1058,
+        "y": 155,
+        "wires": [
+            [
+                "b2d160b1.968aa"
+            ]
+        ]
+    },
+    {
+        "id": "83a05326.2889b",
+        "type": "debug",
+        "z": "8186dfb9.8358a",
+        "name": "Save error",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 255,
+        "y": 174,
+        "wires": []
+    },
+    {
+        "id": "d846d8db.2da5b8",
+        "type": "switch",
+        "z": "8186dfb9.8358a",
+        "name": "",
+        "property": "retryCount",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lte",
+                "v": "5",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 521,
+        "y": 753,
+        "wires": [
+            [
+                "64b70d15.de3654"
+            ],
+            [
+                "faf23c52.44b3e"
+            ]
+        ]
+    },
+    {
+        "id": "d41436f1.ad7c88",
+        "type": "subflow:8186dfb9.8358a",
+        "z": "2974bec.913ba42",
+        "name": "",
+        "x": 1019,
+        "y": 138,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "75fa90a6.a3ae2",
+        "type": "change",
+        "z": "2974bec.913ba42",
+        "name": "Pass configurations",
+        "rules": [
+            {
+                "t": "set",
+                "p": "jobConfig",
+                "pt": "msg",
+                "to": "jobConfig",
+                "tot": "flow"
+            },
+            {
+                "t": "delete",
+                "p": "control",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 697,
+        "y": 131,
+        "wires": [
+            [
+                "d41436f1.ad7c88"
+            ]
+        ]
+    },
+    {
+        "id": "a6b4d7a5.727458",
+        "type": "debug",
+        "z": "e71b891b.d54348",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 745,
+        "y": 263,
+        "wires": []
+    },
+    {
+        "id": "bf9c95a1.7aa1c8",
+        "type": "function",
+        "z": "e71b891b.d54348",
+        "name": "",
+        "func": "msg.topic = \"in test debug log\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 170,
+        "y": 69,
+        "wires": [
+            [
+                "a4baf5ec.7f40b8"
+            ]
+        ]
+    },
+    {
+        "id": "5deb6600.c33fe8",
+        "type": "catch",
+        "z": "f46074a2.0f5938",
+        "name": "Catch top level error",
+        "scope": null,
+        "x": 924,
+        "y": 328,
+        "wires": [
+            [
+                "9a82fcf6.6ed71"
+            ]
+        ]
+    },
+    {
+        "id": "455898f9.9f52b8",
+        "type": "debug",
+        "z": "f46074a2.0f5938",
+        "name": "outer catch msg",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 1196,
+        "y": 462,
+        "wires": []
+    },
+    {
+        "id": "9a82fcf6.6ed71",
+        "type": "function",
+        "z": "f46074a2.0f5938",
+        "name": "",
+        "func": "msg.info = \"catch all error\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1028,
+        "y": 418,
+        "wires": [
+            [
+                "455898f9.9f52b8"
+            ]
+        ]
+    },
+    {
+        "id": "828caa84.4c1e68",
+        "type": "debug",
+        "z": "8186dfb9.8358a",
+        "name": "Updating policy",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 953,
+        "y": 447,
+        "wires": []
+    },
+    {
+        "id": "c1c915f3.69fa78",
+        "type": "couchdb",
+        "z": "e71b891b.d54348",
+        "name": "look up policy",
+        "serverUrl": "http://localhost:5984",
+        "database": "test",
+        "retrievalType": "byId",
+        "designDoc": "",
+        "viewName": "",
+        "x": 492,
+        "y": 224,
+        "wires": [
+            [
+                "a6b4d7a5.727458"
+            ]
+        ]
+    },
+    {
+        "id": "a4baf5ec.7f40b8",
+        "type": "function",
+        "z": "e71b891b.d54348",
+        "name": "set key for lookupmsg",
+        "func": "msg.payload = {};\nmsg.payload = 'policy:1490920438404:1:MOT:116258531' ;\n    \nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 386,
+        "y": 126,
+        "wires": [
+            [
+                "c1c915f3.69fa78",
+                "a6b4d7a5.727458"
+            ]
+        ]
+    },
+    {
+        "id": "736ab1e0.79808",
+        "type": "subflow:e71b891b.d54348",
+        "z": "c77ac6e9.03d1d8",
+        "x": 648,
+        "y": 208,
+        "wires": []
+    },
+    {
+        "id": "46a7cf41.7faaa",
+        "type": "inject",
+        "z": "c77ac6e9.03d1d8",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 196,
+        "y": 189,
+        "wires": [
+            [
+                "736ab1e0.79808"
+            ]
+        ]
+    },
+    {
+        "id": "64b70d15.de3654",
+        "type": "change",
+        "z": "8186dfb9.8358a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "inputPayload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 459,
+        "y": 302,
+        "wires": [
+            [
+                "5faad6a5.7fa1b8"
+            ]
+        ]
+    },
+    {
+        "id": "faf23c52.44b3e",
+        "type": "debug",
+        "z": "8186dfb9.8358a",
+        "name": "Given up retry",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 800,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "bfb02da6.a6d3f",
+        "type": "catch",
+        "z": "2974bec.913ba42",
+        "name": "Import level catch",
+        "scope": null,
+        "x": 1077,
+        "y": 249,
+        "wires": [
+            [
+                "4059f3ea.3ccc7c"
+            ]
+        ]
+    },
+    {
+        "id": "1a4794f.b019a6b",
+        "type": "delay",
+        "z": "2974bec.913ba42",
+        "name": "",
+        "pauseType": "queue",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 424,
+        "y": 133,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "45a46253.1f9b8c",
+        "type": "function",
+        "z": "2974bec.913ba42",
+        "name": "Convert the policy key to a topic for queueing",
+        "func": "msg.key = flow.get('jobConfig').model +\n    \":\" + flow.get('jobConfig').batchId + \n    \":\" + msg.payload.COMPANY +\n    \":\" + msg.payload.PRODUCT +\n    \":\" + msg.payload.POLICY ;\n\nmsg.payload.key = msg.key;\n   \nmsg.payload.batchId = flow.get('jobConfig').batchId ;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 614,
+        "y": 508,
+        "wires": [
+            [
+                "c7cce870.2eee68"
+            ]
+        ]
+    },
+    {
+        "id": "b2d160b1.968aa",
+        "type": "cloudant out",
+        "z": "8186dfb9.8358a",
+        "name": "Save doc",
+        "cloudant": "bd123b44.3dee98",
+        "database": "test",
+        "service": "_ext_",
+        "payonly": true,
+        "operation": "insert",
+        "outputmsg": "no",
+        "x": 1066,
+        "y": 281,
+        "wires": []
+    },
+    {
+        "id": "ec3c2e48.bd12a",
+        "type": "cloudant out",
+        "z": "f46074a2.0f5938",
+        "name": "Save policy",
+        "cloudant": "bd123b44.3dee98",
+        "database": "test",
+        "service": "_ext_",
+        "payonly": true,
+        "operation": "insert",
+        "outputmsg": "no",
+        "x": 1041,
+        "y": 75,
+        "wires": []
+    },
+    {
+        "id": "b5983cca.b259b",
+        "type": "cloudant in",
+        "z": "8186dfb9.8358a",
+        "name": "Look up policy",
+        "cloudant": "bd123b44.3dee98",
+        "database": "test",
+        "service": "_ext_",
+        "search": "_id_",
+        "design": "",
+        "index": "",
+        "x": 786,
+        "y": 115,
+        "wires": [
+            [
+                "7228211b.785d9",
+                "828caa84.4c1e68"
+            ]
+        ]
+    },
+    {
+        "id": "77471e75.c69cd",
+        "type": "function",
+        "z": "f46074a2.0f5938",
+        "name": "msg",
+        "func": "msg.weAreDone = \"yes\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 887,
+        "y": 752,
+        "wires": [
+            [
+                "584553a6.e6395c"
+            ]
+        ]
+    },
+    {
+        "id": "d03f93e4.1f204",
+        "type": "change",
+        "z": "8186dfb9.8358a",
+        "name": "",
+        "rules": [],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 184,
+        "y": 488,
+        "wires": [
+            [
+                "a9b78673.f3af88"
+            ]
+        ]
+    },
+    {
+        "id": "c7cce870.2eee68",
+        "type": "msgAggregator",
+        "z": "2974bec.913ba42",
+        "name": "merge messages",
+        "master": "",
+        "match": "key",
+        "aggrField": "payload.aggregated",
+        "payloadOnly": true,
+        "timeoutValue": "500",
+        "timeoutAction": "forward",
+        "count": "10",
+        "x": 950,
+        "y": 471,
+        "wires": [
+            [
+                "33fdce3e.91b802"
+            ]
+        ]
+    },
+    {
+        "id": "33fdce3e.91b802",
+        "type": "function",
+        "z": "2974bec.913ba42",
+        "name": "Convert the policy key to a topic for queueing",
+        "func": "msg.payload.key = flow.get('jobConfig').model +\n    \":\" + flow.get('jobConfig').batchId + \n    \":\" + msg.payload.aggregated[0].COMPANY +\n    \":\" + msg.payload.aggregated[0].PRODUCT +\n    \":\" + msg.payload.aggregated[0].POLICY ;\n   \nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 744,
+        "y": 284,
+        "wires": [
+            [
+                "75fa90a6.a3ae2"
+            ]
+        ]
+    },
+    {
+        "id": "92b7c69.c7a8e38",
+        "type": "cloudant out",
+        "z": "567060e4.676f1",
+        "name": "save doc",
+        "cloudant": "bd123b44.3dee98",
+        "database": "test",
+        "service": "_ext_",
+        "payonly": false,
+        "operation": "insert",
+        "outputmsg": "success",
+        "x": 868,
+        "y": 369,
+        "wires": [
+            [
+                "54e1b67d.49d0b8"
+            ]
+        ]
+    },
+    {
+        "id": "db257167.89451",
+        "type": "inject",
+        "z": "567060e4.676f1",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 246,
+        "y": 553,
+        "wires": [
+            [
+                "451ccf3f.7bffa"
+            ]
+        ]
+    },
+    {
+        "id": "6d06d88.230eb28",
+        "type": "catch",
+        "z": "567060e4.676f1",
+        "name": "",
+        "scope": [
+            "92b7c69.c7a8e38"
+        ],
+        "x": 846,
+        "y": 674,
+        "wires": [
+            [
+                "d7deead8.8d0098"
+            ]
+        ]
+    },
+    {
+        "id": "d7deead8.8d0098",
+        "type": "debug",
+        "z": "567060e4.676f1",
+        "name": "save doc error",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 1024,
+        "y": 663,
+        "wires": []
+    },
+    {
+        "id": "451ccf3f.7bffa",
+        "type": "function",
+        "z": "567060e4.676f1",
+        "name": "",
+        "func": "msg._id = \"testmsg\";\nmsg._rev = \"3-4cf320cae3e2d48317e629d10397769d\";\nmsg.payload = {};\nmsg.payload.text = \"foo\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 410,
+        "y": 453,
+        "wires": [
+            [
+                "92b7c69.c7a8e38",
+                "e8f2f437.98ecd8"
+            ]
+        ]
+    },
+    {
+        "id": "458d450d.1106ac",
+        "type": "cloudant in",
+        "z": "567060e4.676f1",
+        "name": "read doc",
+        "cloudant": "bd123b44.3dee98",
+        "database": "test",
+        "service": "_ext_",
+        "search": "_id_",
+        "design": "",
+        "index": "",
+        "x": 907,
+        "y": 539,
+        "wires": [
+            [
+                "d8d4604e.426be"
+            ]
+        ]
+    },
+    {
+        "id": "d8d4604e.426be",
+        "type": "debug",
+        "z": "567060e4.676f1",
+        "name": "Doc read",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 1058,
+        "y": 502,
+        "wires": []
+    },
+    {
+        "id": "d77555ad.2f7f78",
+        "type": "catch",
+        "z": "567060e4.676f1",
+        "name": "",
+        "scope": [
+            "458d450d.1106ac"
+        ],
+        "x": 845,
+        "y": 596,
+        "wires": [
+            [
+                "9c7da165.7919e"
+            ]
+        ]
+    },
+    {
+        "id": "9c7da165.7919e",
+        "type": "debug",
+        "z": "567060e4.676f1",
+        "name": "read doc err",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 1000,
+        "y": 592,
+        "wires": []
+    },
+    {
+        "id": "e8f2f437.98ecd8",
+        "type": "function",
+        "z": "567060e4.676f1",
+        "name": "move prepare for read",
+        "func": "if (msg.payload !== undefined) {\nmsg.origPayload = msg.payload;\nmsg.payload._id = msg._id;    \n} else {\n    msg.payload = {};\n    msg.payload._id = msg._id;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 781,
+        "y": 472,
+        "wires": [
+            [
+                "458d450d.1106ac"
+            ]
+        ]
+    },
+    {
+        "id": "4fddd2b2.78778c",
+        "type": "delay",
+        "z": "567060e4.676f1",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 673,
+        "y": 375,
+        "wires": [
+            [
+                "e8f2f437.98ecd8"
+            ]
+        ]
+    },
+    {
+        "id": "54367737.281008",
+        "type": "inject",
+        "z": "139514ac.2ca9ab",
+        "name": "Run test set 1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 110,
+        "y": 70,
+        "wires": [
+            [
+                "49e15ceb.037024",
+                "a3d0ee52.2b538",
+                "b7d6a7fd.34cb38"
+            ]
+        ]
+    },
+    {
+        "id": "3370c0f6.d45c7",
+        "type": "cloudant out",
+        "z": "139514ac.2ca9ab",
+        "name": "Insert msg",
+        "cloudant": "bd123b44.3dee98",
+        "database": "test1",
+        "service": "_ext_",
+        "payonly": false,
+        "operation": "insert",
+        "outputmsg": "no",
+        "x": 761,
+        "y": 57,
+        "wires": []
+    },
+    {
+        "id": "7818c36a.18eafc",
+        "type": "function",
+        "z": "139514ac.2ca9ab",
+        "name": "hub",
+        "func": "return msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 297,
+        "y": 207,
+        "wires": [
+            [
+                "3370c0f6.d45c7",
+                "2440237d.cf886c",
+                "176700d7.be6edf",
+                "e31ab824.53c278"
+            ]
+        ]
+    },
+    {
+        "id": "f1ae3f78.8c60b",
+        "type": "cloudant out",
+        "z": "139514ac.2ca9ab",
+        "name": "Insert and return msg",
+        "cloudant": "bd123b44.3dee98",
+        "database": "test1",
+        "service": "_ext_",
+        "payonly": false,
+        "operation": "insert",
+        "outputmsg": "yes",
+        "x": 813,
+        "y": 425,
+        "wires": [
+            [
+                "6dbaf570.4c1a1c"
+            ]
+        ]
+    },
+    {
+        "id": "6dbaf570.4c1a1c",
+        "type": "debug",
+        "z": "139514ac.2ca9ab",
+        "name": "Basic msg test output",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 1119,
+        "y": 307,
+        "wires": []
+    },
+    {
+        "id": "8be1ac9a.00bb",
+        "type": "catch",
+        "z": "139514ac.2ca9ab",
+        "name": "",
+        "scope": null,
+        "x": 809,
+        "y": 619,
+        "wires": [
+            [
+                "128a4074.512a9"
+            ]
+        ]
+    },
+    {
+        "id": "128a4074.512a9",
+        "type": "debug",
+        "z": "139514ac.2ca9ab",
+        "name": "all errors",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 1021,
+        "y": 619,
+        "wires": []
+    },
+    {
+        "id": "2440237d.cf886c",
+        "type": "function",
+        "z": "139514ac.2ca9ab",
+        "name": "add return msg",
+        "func": "msg.test = msg.test + \" and returning a msg\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 378,
+        "y": 405,
+        "wires": [
+            [
+                "f1ae3f78.8c60b",
+                "b110cf6b.4f524",
+                "cc0b5a5d.51f828"
+            ]
+        ]
+    },
+    {
+        "id": "49e15ceb.037024",
+        "type": "debug",
+        "z": "139514ac.2ca9ab",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 416,
+        "y": 52,
+        "wires": []
+    },
+    {
+        "id": "2c7629ae.23a466",
+        "type": "cloudant out",
+        "z": "139514ac.2ca9ab",
+        "name": "Insert msg payload",
+        "cloudant": "bd123b44.3dee98",
+        "database": "test1",
+        "service": "_ext_",
+        "payonly": true,
+        "operation": "insert",
+        "outputmsg": "no",
+        "x": 874,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "176700d7.be6edf",
+        "type": "function",
+        "z": "139514ac.2ca9ab",
+        "name": "just payload option",
+        "func": "msg.test = msg.test + \", just payload option\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 524,
+        "y": 207,
+        "wires": [
+            [
+                "2c7629ae.23a466",
+                "7f1ea5f9.390f1c"
+            ]
+        ]
+    },
+    {
+        "id": "14536178.0fcd2f",
+        "type": "cloudant out",
+        "z": "139514ac.2ca9ab",
+        "name": "Insert and return msg payload",
+        "cloudant": "bd123b44.3dee98",
+        "database": "test1",
+        "service": "_ext_",
+        "payonly": true,
+        "operation": "insert",
+        "outputmsg": "yes",
+        "x": 834,
+        "y": 292,
+        "wires": [
+            [
+                "6dbaf570.4c1a1c"
+            ]
+        ]
+    },
+    {
+        "id": "b110cf6b.4f524",
+        "type": "function",
+        "z": "139514ac.2ca9ab",
+        "name": "just payload option",
+        "func": "msg.test = msg.test + \", just payload option\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 503,
+        "y": 286,
+        "wires": [
+            [
+                "14536178.0fcd2f",
+                "762ccf85.d6946"
+            ]
+        ]
+    },
+    {
+        "id": "b7d6a7fd.34cb38",
+        "type": "function",
+        "z": "139514ac.2ca9ab",
+        "name": "object payload",
+        "func": "msg.test = \"msg insert test with object payload\";\nvar x = msg.payload;\nmsg.payload = {};\nmsg.payload.timestamp = x;\nmsg.payload.test = msg.test;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 113,
+        "y": 283,
+        "wires": [
+            [
+                "7818c36a.18eafc"
+            ]
+        ]
+    },
+    {
+        "id": "a3d0ee52.2b538",
+        "type": "function",
+        "z": "139514ac.2ca9ab",
+        "name": "Basic msg test",
+        "func": "msg.test = \"msg insert test with non object payload\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 135,
+        "y": 149,
+        "wires": [
+            [
+                "7818c36a.18eafc"
+            ]
+        ]
+    },
+    {
+        "id": "cc0b5a5d.51f828",
+        "type": "function",
+        "z": "139514ac.2ca9ab",
+        "name": "add _id fields",
+        "func": "msg.test = msg.test + \", with manual id\";\nmsg._id = msg.test;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 571,
+        "y": 504,
+        "wires": [
+            [
+                "f1ae3f78.8c60b"
+            ]
+        ]
+    },
+    {
+        "id": "762ccf85.d6946",
+        "type": "function",
+        "z": "139514ac.2ca9ab",
+        "name": "add _id fields",
+        "func": "msg.test = msg.test + \", with manual id\";\nif (msg.payload !== undefined && typeof msg.payload == \"object\") {\n    msg.payload._id = msg.test;    \n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 620,
+        "y": 359,
+        "wires": [
+            [
+                "14536178.0fcd2f"
+            ]
+        ]
+    },
+    {
+        "id": "7f1ea5f9.390f1c",
+        "type": "function",
+        "z": "139514ac.2ca9ab",
+        "name": "add _id fields",
+        "func": "msg.test = msg.test + \", with manual id\";\nif (msg.payload !== undefined && typeof msg.payload == \"object\") {\n    msg.payload._id = msg.test;    \n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 706,
+        "y": 243,
+        "wires": [
+            [
+                "2c7629ae.23a466"
+            ]
+        ]
+    },
+    {
+        "id": "e31ab824.53c278",
+        "type": "function",
+        "z": "139514ac.2ca9ab",
+        "name": "add _id fields",
+        "func": "msg.test = msg.test + \", with manual id\";\nmsg._id = msg.test;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 642,
+        "y": 153,
+        "wires": [
+            [
+                "3370c0f6.d45c7"
+            ]
+        ]
+    },
+    {
+        "id": "c31ff069.0b9ad",
+        "type": "function",
+        "z": "f46074a2.0f5938",
+        "name": "Pass configurations",
+        "func": "msg.jobConfig = flow.get(msg.topic);\ndelete msg.control;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 551,
+        "y": 649,
+        "wires": [
+            [
+                "a410974a.d4f6f8"
+            ]
+        ]
+    },
+    {
+        "id": "b9af3dad.83359",
+        "type": "function",
+        "z": "1e057e9b.670cc1",
+        "name": "",
+        "func": "try {\n   msg.test = msg.myTest('this');\n}\ncatch (e) {\n   msg.err = e;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 226,
+        "y": 103,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "45338d4c.c19c64",
+        "type": "inject",
+        "z": "dba0aecc.e9079",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 219,
+        "y": 141,
+        "wires": [
+            [
+                "97e101a.038f7"
+            ]
+        ]
+    },
+    {
+        "id": "97e101a.038f7",
+        "type": "function",
+        "z": "dba0aecc.e9079",
+        "name": "attach fn",
+        "func": "\nmsg.myTest = function(txt) { return txt + ' world';\n  };\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 424,
+        "y": 216,
+        "wires": [
+            [
+                "3ab64322.d154fc",
+                "dfdccf7e.a7ad8",
+                "853ee937.c931d8"
+            ]
+        ]
+    },
+    {
+        "id": "3ab64322.d154fc",
+        "type": "subflow:1e057e9b.670cc1",
+        "z": "dba0aecc.e9079",
+        "x": 664,
+        "y": 221,
+        "wires": [
+            [
+                "655326d0.b60f98"
+            ]
+        ]
+    },
+    {
+        "id": "655326d0.b60f98",
+        "type": "debug",
+        "z": "dba0aecc.e9079",
+        "name": "after sub",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 881,
+        "y": 334,
+        "wires": []
+    },
+    {
+        "id": "df9e2267.ee855",
+        "type": "debug",
+        "z": "dba0aecc.e9079",
+        "name": "before sub",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 687,
+        "y": 470,
+        "wires": []
+    },
+    {
+        "id": "dfdccf7e.a7ad8",
+        "type": "function",
+        "z": "dba0aecc.e9079",
+        "name": "call fn",
+        "func": "try {\n   msg.test = msg.myTest('this is a big Hi');\n}\ncatch (e) {\n   msg.err = e;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 492,
+        "y": 376,
+        "wires": [
+            [
+                "df9e2267.ee855"
+            ]
+        ]
+    },
+    {
+        "id": "3a2d0b2b.f02394",
+        "type": "catch",
+        "z": "dba0aecc.e9079",
+        "name": "",
+        "scope": null,
+        "x": 845,
+        "y": 84,
+        "wires": [
+            [
+                "abbd453e.d72c58"
+            ]
+        ]
+    },
+    {
+        "id": "ae2812e0.e01e4",
+        "type": "debug",
+        "z": "dba0aecc.e9079",
+        "name": "after error",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 1124,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "853ee937.c931d8",
+        "type": "function",
+        "z": "dba0aecc.e9079",
+        "name": "cause error",
+        "func": "msg.ss.uu = \"\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 638,
+        "y": 126,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "abbd453e.d72c58",
+        "type": "function",
+        "z": "dba0aecc.e9079",
+        "name": "call fn",
+        "func": "try {\n   msg.test = msg.myTest('this is a big AFTER ERROR Hi');\n}\ncatch (e) {\n   msg.err = e;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 957,
+        "y": 146,
+        "wires": [
+            [
+                "ae2812e0.e01e4"
+            ]
+        ]
+    },
+    {
+        "id": "69b0c042.7370b",
+        "type": "function",
+        "z": "f46074a2.0f5938",
+        "name": "attach fn",
+        "func": "\nmsg.myTest = function(txt) { return txt + ' world';\n  };\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 202,
+        "y": 350,
+        "wires": [
+            [
+                "9cbfe2ad.b8f01"
+            ]
+        ]
+    },
+    {
+        "id": "e661c4c6.718c68",
+        "type": "function",
+        "z": "f46074a2.0f5938",
+        "name": "call fn",
+        "func": "try {\n   msg.test = msg.myTest('this is a big Hi');\n}\ncatch (e) {\n   msg.err = e;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 762,
+        "y": 164,
+        "wires": [
+            [
+                "6ce9250.380b7dc"
+            ]
+        ]
+    },
+    {
+        "id": "6ce9250.380b7dc",
+        "type": "debug",
+        "z": "f46074a2.0f5938",
+        "name": "before sub",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 957,
+        "y": 258,
+        "wires": []
+    },
+    {
+        "id": "ce5061b0.d902a",
+        "type": "amqp in",
+        "z": "b1e12f56.bb884",
+        "name": "",
+        "topic": "",
+        "iotype": "4",
+        "ioname": "queue2",
+        "server": "c58994c4.ef9f58",
+        "x": 284,
+        "y": 135,
+        "wires": [
+            [
+                "b660c6a.69b6b38"
+            ]
+        ]
+    },
+    {
+        "id": "73a2eb.78dfdd14",
+        "type": "amqp out",
+        "z": "b1e12f56.bb884",
+        "name": "",
+        "routingkey": "",
+        "iotype": "4",
+        "ioname": "queue2",
+        "server": "c58994c4.ef9f58",
+        "x": 1133,
+        "y": 209,
+        "wires": []
+    },
+    {
+        "id": "74c44b26.1cd5a4",
+        "type": "debug",
+        "z": "b1e12f56.bb884",
+        "name": "Q error",
+        "active": true,
+        "console": "false",
+        "complete": "true",
+        "x": 424,
+        "y": 372,
+        "wires": []
+    },
+    {
+        "id": "55f03613.f32d38",
+        "type": "catch",
+        "z": "b1e12f56.bb884",
+        "name": "",
+        "scope": null,
+        "x": 194,
+        "y": 363,
+        "wires": [
+            [
+                "74c44b26.1cd5a4"
+            ]
+        ]
+    },
+    {
+        "id": "cf155640.22c578",
+        "type": "debug",
+        "z": "b1e12f56.bb884",
+        "name": "Msg from q",
+        "active": true,
+        "console": "true",
+        "complete": "true",
+        "x": 719,
+        "y": 90,
+        "wires": []
+    },
+    {
+        "id": "52594ddf.d659a4",
+        "type": "inject",
+        "z": "b1e12f56.bb884",
+        "name": "start the process",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 714,
+        "y": 203,
+        "wires": [
+            [
+                "ee8db211.19759"
+            ]
+        ]
+    },
+    {
+        "id": "1f1497e9.eeb0f8",
+        "type": "bigcsv",
+        "z": "b1e12f56.bb884",
+        "name": "",
+        "filename": "",
+        "x": 1002,
+        "y": 341,
+        "wires": [
+            [
+                "73a2eb.78dfdd14"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "5612f9a.7fd5f08",
+        "type": "function",
+        "z": "b1e12f56.bb884",
+        "name": "Configure Policy file import",
+        "func": "msg.filename = flow.get(msg.topic).sourceDataPath + \"POLICY.CSV\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 792,
+        "y": 416,
+        "wires": [
+            [
+                "1f1497e9.eeb0f8"
+            ]
+        ]
+    },
+    {
+        "id": "ee8db211.19759",
+        "type": "function",
+        "z": "b1e12f56.bb884",
+        "name": "Load configurations",
+        "func": "\nfunction getRandom(min, max) {\n  min = Math.ceil(min);\n  max = Math.floor(max);\n  return Math.floor(Math.random() * (max - min + 1)) + min;\n}\nvar i = Date.now();\nvar jobConfig = {};\njobConfig.batchId = String(i) + \":\" + String(getRandom(100,999));\njobConfig.model = 'policy';\njobConfig.sourceDataPath = './sample/Current/subset/';\nflow.set(jobConfig.batchId, jobConfig);\nmsg.topic =  jobConfig.batchId;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 735,
+        "y": 315,
+        "wires": [
+            [
+                "5612f9a.7fd5f08"
+            ]
+        ]
+    },
+    {
+        "id": "ae7e90ee.a3e9a",
+        "type": "fs-file-lister",
+        "z": "2119bf4b.5d876",
+        "name": "list files",
+        "start": "/",
+        "pattern": "*.CSV",
+        "path": true,
+        "single": true,
+        "depth": 0,
+        "stat": false,
+        "x": 178,
+        "y": 295,
+        "wires": [
+            [
+                "833c60d9.85576"
+            ]
+        ]
+    },
+    {
+        "id": "6d032834.bcfee8",
+        "type": "debug",
+        "z": "2119bf4b.5d876",
+        "name": "Error",
+        "active": true,
+        "console": "true",
+        "complete": "true",
+        "x": 347,
+        "y": 599,
+        "wires": []
+    },
+    {
+        "id": "e987207c.5a8be",
+        "type": "inject",
+        "z": "2119bf4b.5d876",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 145,
+        "y": 79,
+        "wires": [
+            [
+                "877d77e.744ce88"
+            ]
+        ]
+    },
+    {
+        "id": "877d77e.744ce88",
+        "type": "function",
+        "z": "2119bf4b.5d876",
+        "name": "Load configurations",
+        "func": "\nfunction getRandom(min, max) {\n  min = Math.ceil(min);\n  max = Math.floor(max);\n  return Math.floor(Math.random() * (max - min + 1)) + min;\n}\nvar i = Date.now();\nvar jobConfig = {};\njobConfig.batchId = String(i) + \":\" + String(getRandom(100,999));\n//jobConfig.sourceDataPath = './sample/Current/';\njobConfig.sourceDataPath = './sample/Current/subset/';\n\nmsg.topic =  jobConfig.batchId;\nmsg.payload = {};\nmsg.payload.start = jobConfig.sourceDataPath;\nmsg.jobConfig = jobConfig;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 195,
+        "y": 172,
+        "wires": [
+            [
+                "ae7e90ee.a3e9a"
+            ]
+        ]
+    },
+    {
+        "id": "833c60d9.85576",
+        "type": "function",
+        "z": "2119bf4b.5d876",
+        "name": "filter and sort",
+        "func": "var proj = global.get('proj');\n\nvar result = proj.routeFiles2BigCSV(msg.topic,\n    msg.payload,\n    proj.expectedSourceFiles);\n\nreturn result;",
+        "outputs": "2",
+        "noerr": 0,
+        "x": 185,
+        "y": 426,
+        "wires": [
+            [
+                "7a2f5e3f.ec6ba"
+            ],
+            [
+                "932f33ce.0bef9"
+            ]
+        ]
+    },
+    {
+        "id": "2161025.40c37fe",
+        "type": "amqp out",
+        "z": "2119bf4b.5d876",
+        "name": "",
+        "routingkey": "",
+        "iotype": "4",
+        "ioname": "queue2",
+        "server": "c58994c4.ef9f58",
+        "x": 530,
+        "y": 376,
+        "wires": []
+    },
+    {
+        "id": "7a2f5e3f.ec6ba",
+        "type": "bigcsv",
+        "z": "2119bf4b.5d876",
+        "name": "",
+        "filename": "",
+        "x": 512,
+        "y": 106,
+        "wires": [
+            [
+                "8dcc80c.8c9928"
+            ],
+            [
+                "d1cb2d6a.c610b"
+            ]
+        ]
+    },
+    {
+        "id": "8dcc80c.8c9928",
+        "type": "function",
+        "z": "2119bf4b.5d876",
+        "name": "Shape for queueing",
+        "func": "msg.key = msg.topic + \n    \":\" + msg.payload.COMPANY +\n    \":\" + msg.payload.PRODUCT +\n    \":\" + msg.payload.POLICY ;\n\nmsg.payload.key = msg.key;\nmsg.payload.topic = msg.topic;\nmsg.payload = [msg.payload];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 559,
+        "y": 202,
+        "wires": [
+            [
+                "18a0d5da.b6d21a"
+            ]
+        ]
+    },
+    {
+        "id": "7395ff72.36d11",
+        "type": "catch",
+        "z": "2119bf4b.5d876",
+        "name": "",
+        "scope": null,
+        "x": 160,
+        "y": 536,
+        "wires": [
+            [
+                "6d032834.bcfee8"
+            ]
+        ]
+    },
+    {
+        "id": "18a0d5da.b6d21a",
+        "type": "function",
+        "z": "2119bf4b.5d876",
+        "name": "Buffer by key",
+        "func": "context.set('timeout', Date.now() + 500);\nsetTimeout(checkTimeOut, 600, this);\n\nvar buff = context.get('msgBuffer');\nif(!buff) {\n    context.set('msgBuffer', msg );\n    return;\n}\n\n// Buffer messages with same key\nif(buff.key === msg.key) {\n    buff.payload.push(msg.payload[0]);\n} else {\n    context.set('msgBuffer', msg );\n    \n    if (buff.payload.length > 1) {\n        node.log('payload count = ' + buff.payload.length.toString());\n    }\n    return buff;\n}\n\nfunction sendMsg(value) {\n    \n}\n\nfunction checkTimeOut(){\n\n    var buff = context.get('msgBuffer');\n    if(context.get('timeout') < Date.now() && buff) {\n        if (buff.payload.length > 1) {\n            node.log('payload count = ' + buff.payload.length.toString());\n        }\n      node.send(buff);\n      context.set('msgBuffer', null);\n    } \n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 533,
+        "y": 291,
+        "wires": [
+            [
+                "2161025.40c37fe"
+            ]
+        ]
+    },
+    {
+        "id": "867fec2e.2a072",
+        "type": "function",
+        "z": "b1e12f56.bb884",
+        "name": "stub out msg",
+        "func": "delete msg.amqpMessage;\nmsg.topic = msg.payload[0].topic;\nmsg.key = msg.payload[0].key;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 521,
+        "y": 167,
+        "wires": [
+            [
+                "cf155640.22c578"
+            ]
+        ]
+    },
+    {
+        "id": "b660c6a.69b6b38",
+        "type": "function",
+        "z": "b1e12f56.bb884",
+        "name": "dev nul",
+        "func": "\nreturn;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 428,
+        "y": 243,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d1cb2d6a.c610b",
+        "type": "function",
+        "z": "2119bf4b.5d876",
+        "name": "Log end",
+        "func": "if (msg.control.state === 'end') {\n    return msg;\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 800,
+        "y": 88,
+        "wires": [
+            [
+                "4ab163f1.1a516c"
+            ]
+        ]
+    },
+    {
+        "id": "4ab163f1.1a516c",
+        "type": "debug",
+        "z": "2119bf4b.5d876",
+        "name": "",
+        "active": true,
+        "console": "true",
+        "complete": "true",
+        "x": 970,
+        "y": 92,
+        "wires": []
+    },
+    {
+        "id": "932f33ce.0bef9",
+        "type": "debug",
+        "z": "2119bf4b.5d876",
+        "name": "unknown files",
+        "active": true,
+        "console": "true",
+        "complete": "true",
+        "x": 429,
+        "y": 487,
+        "wires": []
+    }
+]
