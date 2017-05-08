@@ -6,7 +6,6 @@
   "scripts": {
     "test": "mocha",
     "coverage": ".\\node_modules\\.bin\\istanbul cover -x \"lib/**/**.spec.js\" .\\node_modules\\mocha\\bin\\_mocha"
-
   },
   "repository": {
     "type": "git",
@@ -22,6 +21,14 @@
     "url": "https://github.com/tscott-au/node-red-csv-import/issues"
   },
   "homepage": "https://github.com/tscott-au/node-red-csv-import#readme",
+  "globalDependencies": {
+    "node-red": "^0.16.2",
+    "node-red-contrib-amqp": "^0.4.5",
+    "istanbul": "^0.4.5",
+    "jsdoc": "^3.4.3",
+    "mocha": "^3.3.0",
+    "standard": "^10.0.2"
+  },
   "devDependencies": {
     "chai": "^3.5.0",
     "istanbul": "^0.4.5",
@@ -33,5 +40,8 @@
     "env": [
       "mocha"
     ]
+  },
+  "dependencies": {
+    "node-red-contrib-fs": "^1.0.1"
   }
 }
